@@ -1,0 +1,8 @@
+{
+  "name": "WAVES - Village Water Early Warning System",
+  "description": "Mobile-first early warning prototype predicting village-level water scarcity 30–60 days in advance with XGBoost, Random Forest, and SHAP explainability.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
