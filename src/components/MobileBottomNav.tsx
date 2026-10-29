@@ -1,8 +1,9 @@
-import { Home, Sliders, Truck } from 'lucide-react';
+import { LayoutDashboard, Radio, Sliders, Truck, PhoneCall } from 'lucide-react';
+import { AppTab } from '../types';
 
 interface MobileBottomNavProps {
-  activeTab: 'villages' | 'simulator' | 'relief';
-  onTabChange: (tab: 'villages' | 'simulator' | 'relief') => void;
+  activeTab: AppTab;
+  onTabChange: (tab: AppTab) => void;
   criticalCount: number;
 }
 
@@ -11,57 +12,45 @@ export function MobileBottomNav({
   onTabChange,
   criticalCount,
 }: MobileBottomNavProps) {
+  const tabs = [
+    { id: 'overview' as AppTab, label: 'Overview', icon: LayoutDashboard },
+    { id: 'villages' as AppTab, label: 'Radar', icon: Radio, badge: criticalCount },
+    { id: 'simulator' as AppTab, label: 'Simulator', icon: Sliders },
+    { id: 'relief' as AppTab, label: 'Relief', icon: Truck },
+    { id: 'contacts' as AppTab, label: 'Contacts', icon: PhoneCall },
+  ];
+
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-sky-100 text-slate-600 py-2 px-4 shadow-[0_-4px_20px_rgba(2,132,199,0.06)] md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-sky-100 text-slate-600 py-1.5 px-2 shadow-[0_-4px_20px_rgba(2,132,199,0.06)] md:hidden">
       <div className="max-w-md mx-auto flex items-center justify-around">
-        {/* Tab 1: Village Radar */}
-        <button
-          onClick={() => onTabChange('villages')}
-          id="nav-villages-btn"
-          className={`flex flex-col items-center justify-center py-1.5 px-4 rounded-2xl transition-all relative ${
-            activeTab === 'villages'
-              ? 'text-sky-600 bg-sky-50 font-bold shadow-sm'
-              : 'text-slate-500 hover:text-sky-600'
-          }`}
-        >
-          <div className="relative">
-            <Home className="w-5 h-5" />
-            {criticalCount > 0 && (
-              <span className="absolute -top-1 -right-2 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-white">
-                {criticalCount}
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              id={`nav-${tab.id}-btn`}
+              className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all relative ${
+                isActive
+                  ? 'text-sky-600 font-bold'
+                  : 'text-slate-500 hover:text-sky-600'
+              }`}
+            >
+              <div className="relative">
+                <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5px]' : ''}`} />
+                {Boolean(tab.badge && tab.badge > 0) && (
+                  <span className="absolute -top-1 -right-2 w-3.5 h-3.5 rounded-full bg-rose-500 text-white text-[8px] font-bold flex items-center justify-center ring-2 ring-white">
+                    {tab.badge}
+                  </span>
+                )}
+              </div>
+              <span className={`text-[10px] mt-0.5 tracking-tight ${isActive ? 'text-sky-600 font-bold' : 'text-slate-500'}`}>
+                {tab.label}
               </span>
-            )}
-          </div>
-          <span className="text-[11px] mt-1 tracking-tight">Village Radar</span>
-        </button>
-
-        {/* Tab 2: What-If ML Simulator */}
-        <button
-          onClick={() => onTabChange('simulator')}
-          id="nav-simulator-btn"
-          className={`flex flex-col items-center justify-center py-1.5 px-4 rounded-2xl transition-all ${
-            activeTab === 'simulator'
-              ? 'text-sky-600 bg-sky-50 font-bold shadow-sm'
-              : 'text-slate-500 hover:text-sky-600'
-          }`}
-        >
-          <Sliders className="w-5 h-5" />
-          <span className="text-[11px] mt-1 tracking-tight">ML Simulator</span>
-        </button>
-
-        {/* Tab 3: Relief Dispatch */}
-        <button
-          onClick={() => onTabChange('relief')}
-          id="nav-relief-btn"
-          className={`flex flex-col items-center justify-center py-1.5 px-4 rounded-2xl transition-all ${
-            activeTab === 'relief'
-              ? 'text-sky-600 bg-sky-50 font-bold shadow-sm'
-              : 'text-slate-500 hover:text-sky-600'
-          }`}
-        >
-          <Truck className="w-5 h-5" />
-          <span className="text-[11px] mt-1 tracking-tight">Relief Center</span>
-        </button>
+            </button>
+          );
+        })}
       </div>
     </nav>
   );

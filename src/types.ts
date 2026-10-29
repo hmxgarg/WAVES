@@ -1,5 +1,7 @@
 export type AlertStatus = 'Safe' | 'Warning' | 'Critical';
 
+export type AppTab = 'overview' | 'villages' | 'simulator' | 'relief' | 'contacts';
+
 export type ModelType = 'XGBoost' | 'Random Forest' | 'Ensemble';
 
 export interface ShapFeature {
